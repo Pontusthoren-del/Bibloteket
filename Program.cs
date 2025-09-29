@@ -18,10 +18,9 @@ namespace Bibloteket
             {
                 if (Login())
                 {
-                    Console.WriteLine("Du är inloggad");
-                    Console.WriteLine("Tryck enter för logga ut");
-                    Console.ReadLine();
                     loginAttempts = 0;
+                    RunMainMenu();
+                    break;
                 }
                 else
                 {
@@ -78,7 +77,7 @@ namespace Bibloteket
                 string input = Console.ReadLine();
                 int choice;
 
-                if(int.TryParse(input, out choice))
+                if (int.TryParse(input, out choice))
                 {
                     switch (choice)
                     {
@@ -90,6 +89,7 @@ namespace Bibloteket
                             break;
                         case 3:
                             LamnaTillbakaBok();
+                            break;
                         case 4:
                             MinaLan();
                             break;
@@ -110,7 +110,29 @@ namespace Bibloteket
                 }
             }
         }
-
-
+        static void VisaBocker()
+        {
+            Console.WriteLine("Visa alla böcker...");
+            Console.WriteLine("Tryck Enter för att återgå till huvudmenyn.");
+            Console.ReadLine();
+        }
+        static void LanaBocker()
+        {
+            Console.WriteLine("Låna bok...");
+            Console.WriteLine("Tryck Enter för att återgå till huvudmenyn.");
+            Console.ReadLine();
+        }
+        static void LamnaTillbakaBok()
+        {
+            Console.WriteLine("Lämna tillbaka bok...");
+            Console.WriteLine("Tryck Enter för att återgå till huvudmenyn.");
+            Console.ReadLine();
+        }
+        static void MinaLan()
+        {
+            Console.WriteLine("Visa mina lån...");
+            Console.WriteLine("Tryck Enter för att återgå till huvudmenyn.");
+            Console.ReadLine();
+        }
     }
 }
