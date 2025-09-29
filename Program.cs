@@ -9,10 +9,13 @@ namespace Bibloteket
         static string[] bokTitlar = new string[5];
         static int[] totalExemplar = new int[5];
         static int[] utlanadeExemplar = new int[5];
+        static int[,] userLoans = new int[5, 5];
+        static int loggedInUserIndex = -1;
         static void Main(string[] args)
         {
-            InitUsers();
+            InitAnvandare();
             InitBocker();
+            InitLan();
             RunProgram();
         }
         static void RunProgram()
@@ -40,7 +43,7 @@ namespace Bibloteket
                 }
             }
         }
-        static void InitUsers()
+        static void InitAnvandare()
         {
             usernames[0] = "Pontus"; pins[0] = "1111";
             usernames[1] = "Carl"; pins[1] = "2222";
@@ -61,6 +64,7 @@ namespace Bibloteket
             {
                 if (inputUser == usernames[i] && inputPin == pins[i])
                 {
+                    loggedInUserIndex = i;
                     Console.WriteLine($"Välkommen {inputUser}");
                     return true;
                 }
@@ -101,6 +105,7 @@ namespace Bibloteket
                             MinaLan();
                             break;
                         case 5:
+                            loggedInUserIndex = -1;
                             loggedIn = false;
                             Console.WriteLine("Du loggar ut...Tryck Enter.");
                             Console.ReadLine();
@@ -120,7 +125,7 @@ namespace Bibloteket
         static void VisaBocker()
         {
             Console.WriteLine("Visa alla böcker...");
-            for(int i = 0; i<bokTitlar.Length; i++)
+            for (int i = 0; i < bokTitlar.Length; i++)
             {
                 int tillgangliga = totalExemplar[i] - utlanadeExemplar[i];
                 Console.WriteLine($"{i + 1}.{bokTitlar[i]} - Tillgängliga exemplar: {tillgangliga}.");
@@ -140,8 +145,66 @@ namespace Bibloteket
         static void LanaBocker()
         {
             Console.WriteLine("Låna bok...");
-            Console.WriteLine("Tryck Enter för att återgå till huvudmenyn.");
-            Console.ReadLine();
+            for (int i = 0; i < bokTitlar.Length; i++)
+            {
+                int tillgangliga = totalExemplar[i] - utlanadeExemplar[i];
+                Console.WriteLine($"{i + 1}.{bokTitlar[i]} - Tillgängliga exemplar: {tillgangliga}.");
+            }
+            Console.WriteLine("Ange nummret för boken du vill låna.");
+            string input = Console.ReadLine();
+            int val;
+            if (int.TryParse(input, out val))
+            {
+                int bokIndex = val - 1;
+                if (bokIndex < 0 || bokIndex >= bokTitlar.Length)
+                {
+                    Console.WriteLine("Ogiltligt val.Tryck Enter för att återgå.");
+                    Console.ReadLine();
+                    return;
+                }
+                int tillgangligaEX = totalExemplar[bokIndex] - utlanadeExemplar[bokIndex];
+                if (tillgangligaEX <= 0)
+                {
+                    Console.WriteLine("Tyvärr finns det inga fler exemplar.Tryck Enter för återgå.");
+                    Console.ReadLine();
+                    return;
+                }
+                int userIndex = loggedInUserIndex;
+                bool lanat = false;
+                for (int i = 0; i < 5; i++)
+                {
+                    if (userLoans[userIndex, i] == -1)
+                    {
+                        userLoans[userIndex, i] = bokIndex;
+                        utlanadeExemplar[bokIndex]++;
+                        Console.WriteLine($"Du har lånat: {bokTitlar[bokIndex]}");
+                        Console.WriteLine("Tryck Enter för att återgå till huvudmenyn.");
+                        Console.ReadLine();
+                        lanat = true;
+                        break;
+                    }
+                }
+                if (!lanat)
+                {
+                    Console.WriteLine("Du har redan lånat max antal böcker.Tryck Enter för att återgå.");
+                    Console.ReadLine();
+                }
+                else
+                {
+                    Console.WriteLine("Ogiltligt val. Tryck Enter för att återgå.");
+                    Console.ReadLine();
+                }
+            }
+        }
+        static void InitLan()
+        {
+            for (int u = 0; u < 5; u++) 
+            {
+                for (int i = 0; i < 5; i++) 
+                {
+                    userLoans[u, i] = -1; 
+                }
+            }
         }
         static void LamnaTillbakaBok()
         {
