@@ -4,12 +4,17 @@ namespace Bibloteket
 {
     class Program
     {
+        //GLOBAL ARRAYS
+        //Usernames and pins hold the login info for the predefined users
         static string[] usernames = new string[5];
         static string[] pins = new string[5];
+        //Book info:Titles,total copies and currently loaned copies.
         static string[] bokTitlar = new string[5];
         static int[] totalExemplar = new int[5];
         static int[] utlanadeExemplar = new int[5];
+        //Userloans keeps track of which books each user has borrowed.
         static int[,] userLoans = new int[5, 5];
+        //Keep track of which user is currently logged in.
         static int loggedInUserIndex = -1;
         static void Main(string[] args)
         {
@@ -43,6 +48,7 @@ namespace Bibloteket
                 }
             }
         }
+        //This method fills the username and pin with predefined users.
         static void InitAnvandare()
         {
             usernames[0] = "Pontus"; pins[0] = "1111";
@@ -51,6 +57,8 @@ namespace Bibloteket
             usernames[3] = "Josefine"; pins[3] = "4444";
             usernames[4] = "Elliott"; pins[4] = "5555";
         }
+        //Handle user login.Returns true if credentials are correct.
+        //Also set loggedInUserIndex to the currently logged in user.
         static bool Login()
         {
             Console.WriteLine("=== Logga in på Bibloteket ===");
@@ -71,6 +79,7 @@ namespace Bibloteket
             }
             return false;
         }
+        //Show menu options and handles user selection.
         static void RunMainMenu()
         {
             bool loggedIn = true;
@@ -122,6 +131,8 @@ namespace Bibloteket
                 }
             }
         }
+        //Loop through all books and calculates available copies
+        //Available copies = total copies - currently loaned copies
         static void VisaBocker()
         {
             Console.WriteLine("Visa alla böcker...");
@@ -133,6 +144,7 @@ namespace Bibloteket
             Console.WriteLine("Tryck Enter för att återgå till huvudmenyn.");
             Console.ReadLine();
         }
+        //Sets the book titles, total copies, and initial loaned count.
         static void InitBocker()
         {
             bokTitlar[0] = "Sagan om Ringen,Ringens brödrarskap."; totalExemplar[0] = 3; utlanadeExemplar[0] = 0;
@@ -142,11 +154,14 @@ namespace Bibloteket
             bokTitlar[4] = "Beren and Lúthien"; totalExemplar[4] = 3; utlanadeExemplar[4] = 0;
 
         }
+        //Lets the user borrow a book if available
+        //Checks availabillity, updates users loan array, and increments loaned count
         static void LanaBocker()
         {
             Console.WriteLine("Låna bok...");
             for (int i = 0; i < bokTitlar.Length; i++)
             {
+                //Calculate available copies for each book
                 int tillgangliga = totalExemplar[i] - utlanadeExemplar[i];
                 Console.WriteLine($"{i + 1}.{bokTitlar[i]} - Tillgängliga exemplar: {tillgangliga}.");
             }
@@ -196,6 +211,7 @@ namespace Bibloteket
                 }
             }
         }
+        //Sets all user loans to -1, meaning no books are borrowed initially.
         static void InitLan()
         {
             for (int u = 0; u < 5; u++) 
