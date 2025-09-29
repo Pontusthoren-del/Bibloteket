@@ -61,5 +61,56 @@ namespace Bibloteket
             }
             return false;
         }
+        static void RunMainMenu()
+        {
+            bool loggedIn = true;
+            while (loggedIn)
+            {
+                Console.Clear();
+                Console.WriteLine("=== HUVUDMENY ===");
+                Console.WriteLine("1. Visa böcker.");
+                Console.WriteLine("2. Låna bok.");
+                Console.WriteLine("3. Lämna tillbaka bok.");
+                Console.WriteLine("4. Mina lån.");
+                Console.WriteLine("5. Logga ut.");
+                Console.WriteLine("Välj ett av alternativen.");
+
+                string input = Console.ReadLine();
+                int choice;
+
+                if(int.TryParse(input, out choice))
+                {
+                    switch (choice)
+                    {
+                        case 1:
+                            VisaBocker();
+                            break;
+                        case 2:
+                            LanaBocker();
+                            break;
+                        case 3:
+                            LamnaTillbakaBok();
+                        case 4:
+                            MinaLan();
+                            break;
+                        case 5:
+                            loggedIn = false;
+                            Console.WriteLine("Du loggar ut...Tryck Enter.");
+                            Console.ReadLine();
+                            break;
+                        default:
+                            Console.WriteLine("Ogiltligt val.Tryck Enter för att försöka igen.");
+                            Console.ReadLine();
+                            break;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Ogiltligt val.Tryck Enter för att försöka igen.");
+                }
+            }
+        }
+
+
     }
 }
