@@ -6,34 +6,41 @@ namespace Bibloteket
     {
         static string[] usernames = new string[5];
         static string[] pins = new string[5];
+        static string[] bokTitlar = new string[5];
+        static int[] totalExemplar = new int[5];
+        static int[] utlanadeExemplar = new int[5];
         static void Main(string[] args)
         {
-            InItUsers();
+            InitUsers();
+            InitBocker();
             RunProgram();
         }
         static void RunProgram()
         {
-            int loginAttempts = 0;
-            while (loginAttempts < 3)
+            while (true)
             {
-                if (Login())
+                int loginAttempts = 0;
+                while (loginAttempts < 3)
                 {
-                    loginAttempts = 0;
-                    RunMainMenu();
-                    break;
-                }
-                else
-                {
-                    loginAttempts++;
-                    Console.WriteLine($"Felaktiga försök {loginAttempts} av 3.");
-                    if (loginAttempts >= 3)
+                    if (Login())
                     {
-                        Console.WriteLine("För många försök, programmet avslutas.");
+                        loginAttempts = 0;
+                        RunMainMenu();
+                        break;
+                    }
+                    else
+                    {
+                        loginAttempts++;
+                        Console.WriteLine($"Felaktiga försök {loginAttempts} av 3.");
+                        if (loginAttempts >= 3)
+                        {
+                            Console.WriteLine("För många försök, programmet avslutas.");
+                        }
                     }
                 }
             }
         }
-        static void InItUsers()
+        static void InitUsers()
         {
             usernames[0] = "Pontus"; pins[0] = "1111";
             usernames[1] = "Carl"; pins[1] = "2222";
@@ -113,8 +120,22 @@ namespace Bibloteket
         static void VisaBocker()
         {
             Console.WriteLine("Visa alla böcker...");
+            for(int i = 0; i<bokTitlar.Length; i++)
+            {
+                int tillgangliga = totalExemplar[i] - utlanadeExemplar[i];
+                Console.WriteLine($"{i + 1}.{bokTitlar[i]} - Tillgängliga exemplar: {tillgangliga}.");
+            }
             Console.WriteLine("Tryck Enter för att återgå till huvudmenyn.");
             Console.ReadLine();
+        }
+        static void InitBocker()
+        {
+            bokTitlar[0] = "Sagan om Ringen,Ringens brödrarskap."; totalExemplar[0] = 3; utlanadeExemplar[0] = 0;
+            bokTitlar[1] = "Sagan om Ringen,De två tornen."; totalExemplar[1] = 3; utlanadeExemplar[1] = 0;
+            bokTitlar[2] = "Sagan om Ringen,Konungens återkomst."; totalExemplar[2] = 3; utlanadeExemplar[2] = 0;
+            bokTitlar[3] = "The Silmarillion"; totalExemplar[3] = 3; utlanadeExemplar[3] = 0;
+            bokTitlar[4] = "Beren and Lúthien"; totalExemplar[4] = 3; utlanadeExemplar[4] = 0;
+
         }
         static void LanaBocker()
         {
