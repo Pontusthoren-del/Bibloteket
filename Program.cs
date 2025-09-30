@@ -25,28 +25,29 @@ namespace Bibloteket
         }
         static void RunProgram()
         {
-            while (true)
+            bool programRunning = true;
+            int loginAttempts = 0;
+            while (programRunning && loginAttempts < 3)
             {
-                int loginAttempts = 0;
-                while (loginAttempts < 3)
+                if (Login())
                 {
-                    if (Login())
+                    loginAttempts = 0;
+                    RunMainMenu();
+                    break;
+                }
+                else
+                {
+                    loginAttempts++;
+                    Console.WriteLine($"Felaktiga försök {loginAttempts} av 3.");
+                    if (loginAttempts >= 3)
                     {
-                        loginAttempts = 0;
-                        RunMainMenu();
-                        break;
-                    }
-                    else
-                    {
-                        loginAttempts++;
-                        Console.WriteLine($"Felaktiga försök {loginAttempts} av 3.");
-                        if (loginAttempts >= 3)
-                        {
-                            Console.WriteLine("För många försök, programmet avslutas.");
-                        }
+                        Console.WriteLine("För många försök, programmet avslutas.");
+                        Console.ReadLine();
+                        programRunning = false;
                     }
                 }
             }
+
         }
         //This method fills the username and pin with predefined users.
         static void InitAnvandare()
@@ -136,10 +137,14 @@ namespace Bibloteket
         static void VisaBocker()
         {
             Console.WriteLine("Visa alla böcker...");
+            Console.WriteLine("-------------------");
             for (int i = 0; i < bokTitlar.Length; i++)
             {
+                //Calculate available copies for each book
                 int tillgangliga = totalExemplar[i] - utlanadeExemplar[i];
+                //Write out every book and availability and then and a space under.
                 Console.WriteLine($"{i + 1}.{bokTitlar[i]} - Tillgängliga exemplar: {tillgangliga}.");
+                Console.WriteLine();
             }
             Console.WriteLine("Tryck Enter för att återgå till huvudmenyn.");
             Console.ReadLine();
@@ -159,11 +164,15 @@ namespace Bibloteket
         static void LanaBocker()
         {
             Console.WriteLine("Låna bok...");
+            Console.WriteLine("-------------------");
+            //Loop through all book titles
             for (int i = 0; i < bokTitlar.Length; i++)
             {
                 //Calculate available copies for each book
                 int tillgangliga = totalExemplar[i] - utlanadeExemplar[i];
+                //Write out every book and availability and then and a space under.
                 Console.WriteLine($"{i + 1}.{bokTitlar[i]} - Tillgängliga exemplar: {tillgangliga}.");
+                Console.WriteLine();
             }
             Console.WriteLine("Ange nummret för boken du vill låna.");
             string input = Console.ReadLine();
@@ -177,6 +186,7 @@ namespace Bibloteket
                     Console.ReadLine();
                     return;
                 }
+                //Calculate available copies of each book.
                 int tillgangligaEX = totalExemplar[bokIndex] - utlanadeExemplar[bokIndex];
                 if (tillgangligaEX <= 0)
                 {
@@ -186,6 +196,7 @@ namespace Bibloteket
                 }
                 int userIndex = loggedInUserIndex;
                 bool lanat = false;
+                //Check if the user has a empty loan slot(max 5 books).
                 for (int i = 0; i < 5; i++)
                 {
                     if (userLoans[userIndex, i] == -1)
@@ -214,11 +225,11 @@ namespace Bibloteket
         //Sets all user loans to -1, meaning no books are borrowed initially.
         static void InitLan()
         {
-            for (int u = 0; u < 5; u++) 
+            for (int u = 0; u < 5; u++)
             {
-                for (int i = 0; i < 5; i++) 
+                for (int i = 0; i < 5; i++)
                 {
-                    userLoans[u, i] = -1; 
+                    userLoans[u, i] = -1;
                 }
             }
         }
