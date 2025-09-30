@@ -215,14 +215,10 @@ namespace Bibloteket
                     Console.WriteLine("Du har redan lånat max antal böcker.Tryck Enter för att återgå.");
                     Console.ReadLine();
                 }
-                else
-                {
-                    Console.WriteLine("Ogiltligt val. Tryck Enter för att återgå.");
-                    Console.ReadLine();
-                }
             }
         }
-        //Sets all user loans to -1, meaning no books are borrowed initially.
+        // Loop through all users and all their loan slots,
+        // setting each slot to -1 to indicate that the user has not borrowed any books yet.
         static void InitLan()
         {
             for (int u = 0; u < 5; u++)
@@ -235,7 +231,43 @@ namespace Bibloteket
         }
         static void LamnaTillbakaBok()
         {
-            Console.WriteLine("Lämna tillbaka bok...");
+            int userIndex = loggedInUserIndex;
+            bool harLanadeBocker = false;
+            Console.WriteLine("======Lämna tillbaka bok...======");
+            Console.WriteLine("-------------------");
+            //Show the users loaned books.
+            for (int i = 0; i < 5; i++)
+            {
+                int bokIndex = userLoans[userIndex, i];
+                if (bokIndex != -1)
+                {
+                    Console.WriteLine($"{i + 1}.{bokTitlar[bokIndex]}");
+                    harLanadeBocker = true;
+                }
+            }
+            if (!harLanadeBocker)
+            {
+                Console.WriteLine("Du har inga lånade böcker.");
+                Console.WriteLine("Tryck Enter för att återgå till huvudmenyn.");
+                Console.ReadLine();
+                return;
+            }
+            Console.WriteLine("Ange numret på boken du vill lämna tillbaka.");
+            string input = Console.ReadLine();
+            int val;
+            //Check if the input is invalid.
+            if (!int.TryParse(input, out val) || val < 1 || val > 5 || userLoans[userIndex, val - 1] == 1)
+            {
+                Console.WriteLine("Ogiltligt val.Tryck Enter för att återgå.");
+                Console.ReadLine();
+                return;
+            }
+            // Get the index of the borrowed book, mark the slot as empty (-1),
+            // and decrement the number of currently loaned copies for that book
+            int lanadeBokIndex = userLoans[userIndex, val - 1];
+            userLoans[userIndex, val - 1] = 1;
+            utlanadeExemplar[lanadeBokIndex]--;
+            Console.WriteLine($"Du har lämnata tillbaka: {bokTitlar[lanadeBokIndex]}");
             Console.WriteLine("Tryck Enter för att återgå till huvudmenyn.");
             Console.ReadLine();
         }
