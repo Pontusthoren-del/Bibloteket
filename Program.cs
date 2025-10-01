@@ -2,7 +2,7 @@
 
 namespace Bibloteket
 {
-    class Program
+    internal class Program
     {
         //GLOBAL ARRAYS
         //Usernames and pins hold the login info for the predefined users
@@ -33,7 +33,7 @@ namespace Bibloteket
                 {
                     loginAttempts = 0;
                     RunMainMenu();
-                    break;
+                    Console.Clear();
                 }
                 else
                 {
@@ -62,7 +62,8 @@ namespace Bibloteket
         //Also set loggedInUserIndex to the currently logged in user.
         static bool Login()
         {
-            Console.WriteLine("=== Logga in på Bibloteket ===");
+            Console.WriteLine("\t=== Logga in på Bibloteket ===");
+            Console.WriteLine();
             Console.WriteLine("Ange ditt användarnamn.");
             string inputUser = Console.ReadLine();
 
@@ -87,12 +88,13 @@ namespace Bibloteket
             while (loggedIn)
             {
                 Console.Clear();
-                Console.WriteLine("=== HUVUDMENY ===");
+                Console.WriteLine("\t=== HUVUDMENY ===");
                 Console.WriteLine("1. Visa böcker.");
                 Console.WriteLine("2. Låna bok.");
                 Console.WriteLine("3. Lämna tillbaka bok.");
                 Console.WriteLine("4. Mina lån.");
                 Console.WriteLine("5. Logga ut.");
+                Console.WriteLine("-------------------");
                 Console.WriteLine("Välj ett av alternativen.");
 
                 string input = Console.ReadLine();
@@ -136,8 +138,8 @@ namespace Bibloteket
         //Available copies = total copies - currently loaned copies
         static void VisaBocker()
         {
-            Console.WriteLine("Visa alla böcker...");
-            Console.WriteLine("-------------------");
+            Console.WriteLine("\tVisa alla böcker...");
+            Console.WriteLine("\t-------------------");
             for (int i = 0; i < bokTitlar.Length; i++)
             {
                 //Calculate available copies for each book
@@ -146,6 +148,7 @@ namespace Bibloteket
                 Console.WriteLine($"{i + 1}.{bokTitlar[i]} - Tillgängliga exemplar: {tillgangliga}.");
                 Console.WriteLine();
             }
+            Console.WriteLine("-------------------");
             Console.WriteLine("Tryck Enter för att återgå till huvudmenyn.");
             Console.ReadLine();
         }
@@ -163,8 +166,8 @@ namespace Bibloteket
         //Checks availabillity, updates users loan array, and increments loaned count
         static void LanaBocker()
         {
-            Console.WriteLine("Låna bok...");
-            Console.WriteLine("-------------------");
+            Console.WriteLine("\tLåna bok...");
+            Console.WriteLine("\t-------------------");
             //Loop through all book titles
             for (int i = 0; i < bokTitlar.Length; i++)
             {
@@ -204,6 +207,7 @@ namespace Bibloteket
                         userLoans[userIndex, i] = bokIndex;
                         utlanadeExemplar[bokIndex]++;
                         Console.WriteLine($"Du har lånat: {bokTitlar[bokIndex]}");
+                        Console.WriteLine("-------------------");
                         Console.WriteLine("Tryck Enter för att återgå till huvudmenyn.");
                         Console.ReadLine();
                         lanat = true;
@@ -229,6 +233,7 @@ namespace Bibloteket
                 }
             }
         }
+        //Loop through the loaned books and see if the user can return any book.
         static void LamnaTillbakaBok()
         {
             int userIndex = loggedInUserIndex;
@@ -256,7 +261,7 @@ namespace Bibloteket
             string input = Console.ReadLine();
             int val;
             //Check if the input is invalid.
-            if (!int.TryParse(input, out val) || val < 1 || val > 5 || userLoans[userIndex, val - 1] == 1)
+            if (!int.TryParse(input, out val) || val < 1 || val > 5 || userLoans[userIndex, val - 1] == -1)
             {
                 Console.WriteLine("Ogiltligt val.Tryck Enter för att återgå.");
                 Console.ReadLine();
@@ -265,15 +270,34 @@ namespace Bibloteket
             // Get the index of the borrowed book, mark the slot as empty (-1),
             // and decrement the number of currently loaned copies for that book
             int lanadeBokIndex = userLoans[userIndex, val - 1];
-            userLoans[userIndex, val - 1] = 1;
+            userLoans[userIndex, val - 1] = -1;
             utlanadeExemplar[lanadeBokIndex]--;
-            Console.WriteLine($"Du har lämnata tillbaka: {bokTitlar[lanadeBokIndex]}");
+            Console.WriteLine($"Du har lämnat tillbaka: {bokTitlar[lanadeBokIndex]}");
+            Console.WriteLine("-------------------");
             Console.WriteLine("Tryck Enter för att återgå till huvudmenyn.");
             Console.ReadLine();
         }
+        //Loop through our loans and shows them.
         static void MinaLan()
         {
-            Console.WriteLine("Visa mina lån...");
+            int userIndex = loggedInUserIndex;
+            bool harLanadeBocker = false;
+            Console.WriteLine("======Visa mina lån======");
+            Console.WriteLine("-------------------");
+            for (int i = 0; i < 5; i++)
+            {
+                int bokIndex = userLoans[userIndex, i];
+                if (bokIndex != -1)
+                {
+                    Console.WriteLine($"{i + 1}.{bokTitlar[bokIndex]}");
+                    harLanadeBocker = true;
+                }
+            }
+            if (!harLanadeBocker)
+            {
+                Console.WriteLine("Du har inga aktiva lån just nu.");
+            }
+            Console.WriteLine("-------------------");
             Console.WriteLine("Tryck Enter för att återgå till huvudmenyn.");
             Console.ReadLine();
         }
