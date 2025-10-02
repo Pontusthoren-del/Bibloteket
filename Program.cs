@@ -1,4 +1,5 @@
-﻿using System.Reflection.Metadata;
+﻿using System.Drawing;
+using System.Reflection.Metadata;
 
 namespace Bibloteket
 {
@@ -62,7 +63,9 @@ namespace Bibloteket
         //Also set loggedInUserIndex to the currently logged in user.
         static bool Login()
         {
-            Console.WriteLine("\t=== Logga in på Bibloteket ===");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("\t====== Logga in på Bibloteket ======");
+            Console.ResetColor();
             Console.WriteLine();
             Console.Write("Ange ditt användarnamn: ");
             string inputUser = Console.ReadLine();
@@ -87,15 +90,19 @@ namespace Bibloteket
             bool loggedIn = true;
             while (loggedIn)
             {
-                Console.Clear();
+                Console.Clear();              
+                Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine("\t=== HUVUDMENY ===");
+                Console.ResetColor();
                 Console.WriteLine("1. Visa böcker.");
                 Console.WriteLine("2. Låna bok.");
                 Console.WriteLine("3. Lämna tillbaka bok.");
                 Console.WriteLine("4. Mina lån.");
                 Console.WriteLine("5. Logga ut.");
                 Console.WriteLine("-------------------");
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("6. Avsluta programmet.");
+                Console.ResetColor();
                 Console.WriteLine("-------------------");
                 Console.WriteLine("Välj ett av alternativen.");
 
@@ -143,8 +150,10 @@ namespace Bibloteket
         //Available copies = total copies - currently loaned copies
         static void VisaBocker()
         {
-            Console.WriteLine("\tVisa alla böcker...");
-            Console.WriteLine("\t-------------------");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("\t====== Visa alla böcker ======");
+            Console.ResetColor();
+            Console.WriteLine();
             for (int i = 0; i < bokTitlar.Length; i++)
             {
                 //Calculate available copies for each book
@@ -171,8 +180,10 @@ namespace Bibloteket
         //Checks availabillity, updates users loan array, and increments loaned count
         static void LanaBocker()
         {
-            Console.WriteLine("\tLåna bok...");
-            Console.WriteLine("\t-------------------");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("\t====== Låna bok ======");
+            Console.ResetColor();
+            Console.WriteLine();
             //Loop through all book titles
             for (int i = 0; i < bokTitlar.Length; i++)
             {
@@ -182,6 +193,7 @@ namespace Bibloteket
                 Console.WriteLine($"{i + 1}.{bokTitlar[i]} - Tillgängliga exemplar: {tillgangliga}.");
                 Console.WriteLine();
             }
+            Console.WriteLine("-------------------");
             Console.WriteLine("Ange nummret för boken du vill låna.");
             string input = Console.ReadLine();
             int val;
@@ -243,8 +255,10 @@ namespace Bibloteket
         {
             int userIndex = loggedInUserIndex;
             bool harLanadeBocker = false;
-            Console.WriteLine("======Lämna tillbaka bok...======");
-            Console.WriteLine("-------------------");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("\t====== Lämna tillbaka bok ======");
+            Console.ResetColor();
+            Console.WriteLine();
             //Show the users loaned books.
             for (int i = 0; i < 5; i++)
             {
@@ -258,6 +272,7 @@ namespace Bibloteket
             if (!harLanadeBocker)
             {
                 Console.WriteLine("Du har inga lånade böcker.");
+                Console.WriteLine("-------------------");
                 Console.WriteLine("Tryck Enter för att återgå till huvudmenyn.");
                 Console.ReadLine();
                 return;
@@ -287,8 +302,10 @@ namespace Bibloteket
         {
             int userIndex = loggedInUserIndex;
             bool harLanadeBocker = false;
-            Console.WriteLine("======Visa mina lån======");
-            Console.WriteLine("-------------------");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("\t====== Visa mina lån ======");
+            Console.ResetColor();
+            Console.WriteLine();
             for (int i = 0; i < 5; i++)
             {
                 int bokIndex = userLoans[userIndex, i];
