@@ -14,7 +14,7 @@ namespace Bibloteket
         static int[] totalExemplar = new int[5];
         static int[] utlanadeExemplar = new int[5];
         //Userloans keeps track of which books each user has borrowed.
-        static int[,] anvadareLan = new int[5, 5];
+        static int[,] anvandareLan = new int[5, 5];
         //Keep track of which user is currently logged in.
         static int inloggadAnvandareIndex = -1;
         static void Main(string[] args)
@@ -176,9 +176,9 @@ namespace Bibloteket
         //Sets the book titles, total copies, and initial loaned count.
         static void InitBocker()
         {
-            bokTitlar[0] = "Sagan om Ringen,Ringens brödrarskap."; totalExemplar[0] = 3; utlanadeExemplar[0] = 0;
-            bokTitlar[1] = "Sagan om Ringen,De två tornen."; totalExemplar[1] = 3; utlanadeExemplar[1] = 0;
-            bokTitlar[2] = "Sagan om Ringen,Konungens återkomst."; totalExemplar[2] = 3; utlanadeExemplar[2] = 0;
+            bokTitlar[0] = "Sagan om Ringen, Ringens brödrarskap."; totalExemplar[0] = 3; utlanadeExemplar[0] = 0;
+            bokTitlar[1] = "Sagan om Ringen, De två tornen."; totalExemplar[1] = 3; utlanadeExemplar[1] = 0;
+            bokTitlar[2] = "Sagan om Ringen, Konungens återkomst."; totalExemplar[2] = 3; utlanadeExemplar[2] = 0;
             bokTitlar[3] = "The Silmarillion"; totalExemplar[3] = 3; utlanadeExemplar[3] = 0;
             bokTitlar[4] = "Beren and Lúthien"; totalExemplar[4] = 3; utlanadeExemplar[4] = 0;
 
@@ -226,9 +226,9 @@ namespace Bibloteket
                 //Check if the user has a empty loan slot(max 5 books).
                 for (int i = 0; i < 5; i++)
                 {
-                    if (anvadareLan[userIndex, i] == -1)
+                    if (anvandareLan[userIndex, i] == -1)
                     {
-                        anvadareLan[userIndex, i] = bokIndex;
+                        anvandareLan[userIndex, i] = bokIndex;
                         utlanadeExemplar[bokIndex]++;
                         Console.WriteLine($"Du har lånat: {bokTitlar[bokIndex]}");
                         Console.WriteLine("-------------------");
@@ -253,7 +253,7 @@ namespace Bibloteket
             {
                 for (int i = 0; i < 5; i++)
                 {
-                    anvadareLan[u, i] = -1;
+                    anvandareLan[u, i] = -1;
                 }
             }
         }
@@ -269,7 +269,7 @@ namespace Bibloteket
             //Show the users loaned books.
             for (int i = 0; i < 5; i++)
             {
-                int bokIndex = anvadareLan[anvandarIndex, i];
+                int bokIndex = anvandareLan[anvandarIndex, i];
                 if (bokIndex != -1)
                 {
                     Console.WriteLine($"{i + 1}.{bokTitlar[bokIndex]}");
@@ -288,7 +288,7 @@ namespace Bibloteket
             string input = Console.ReadLine();
             int val;
             //Check if the input is invalid.
-            if (!int.TryParse(input, out val) || val < 1 || val > 5 || anvadareLan[anvandarIndex, val - 1] == -1)
+            if (!int.TryParse(input, out val) || val < 1 || val > 5 || anvandareLan[anvandarIndex, val - 1] == -1)
             {
                 Console.WriteLine("Ogiltligt val.Tryck Enter för att återgå.");
                 Console.ReadLine();
@@ -296,8 +296,8 @@ namespace Bibloteket
             }
             // Get the index of the borrowed book, mark the slot as empty (-1),
             // and decrement the number of currently loaned copies for that book
-            int lanadeBokIndex = anvadareLan[anvandarIndex, val - 1];
-            anvadareLan[anvandarIndex, val - 1] = -1;
+            int lanadeBokIndex = anvandareLan[anvandarIndex, val - 1];
+            anvandareLan[anvandarIndex, val - 1] = -1;
             utlanadeExemplar[lanadeBokIndex]--;
             Console.WriteLine($"Du har lämnat tillbaka: {bokTitlar[lanadeBokIndex]}");
             Console.WriteLine("-------------------");
@@ -315,7 +315,7 @@ namespace Bibloteket
             Console.WriteLine();
             for (int i = 0; i < 5; i++)
             {
-                int bokIndex = anvadareLan[anvandareIndex, i];
+                int bokIndex = anvandareLan[anvandareIndex, i];
                 if (bokIndex != -1)
                 {
                     Console.WriteLine($"{i + 1}.{bokTitlar[bokIndex]}");
