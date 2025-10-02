@@ -7,16 +7,16 @@ namespace Bibloteket
     {
         //GLOBAL ARRAYS
         //Usernames and pins hold the login info for the predefined users
-        static string[] usernames = new string[5];
+        static string[] anvandare = new string[5];
         static string[] pins = new string[5];
         //Book info:Titles,total copies and currently loaned copies.
         static string[] bokTitlar = new string[5];
         static int[] totalExemplar = new int[5];
         static int[] utlanadeExemplar = new int[5];
         //Userloans keeps track of which books each user has borrowed.
-        static int[,] userLoans = new int[5, 5];
+        static int[,] anvadareLan = new int[5, 5];
         //Keep track of which user is currently logged in.
-        static int loggedInUserIndex = -1;
+        static int inloggadAnvandareIndex = -1;
         static void Main(string[] args)
         {
             InitAnvandare();
@@ -53,11 +53,11 @@ namespace Bibloteket
         //This method fills the username and pin with predefined users.
         static void InitAnvandare()
         {
-            usernames[0] = "Pontus"; pins[0] = "1111";
-            usernames[1] = "Carl"; pins[1] = "2222";
-            usernames[2] = "Amanda"; pins[2] = "3333";
-            usernames[3] = "Josefine"; pins[3] = "4444";
-            usernames[4] = "Elliott"; pins[4] = "5555";
+            anvandare[0] = "Pontus"; pins[0] = "1111";
+            anvandare[1] = "Carl"; pins[1] = "2222";
+            anvandare[2] = "Amanda"; pins[2] = "3333";
+            anvandare[3] = "Josefine"; pins[3] = "4444";
+            anvandare[4] = "Elliott"; pins[4] = "5555";
         }
         //Handle user login.Returns true if credentials are correct.
         //Also set loggedInUserIndex to the currently logged in user.
@@ -73,11 +73,11 @@ namespace Bibloteket
             Console.Write("Ange din pinkod: ");
             string inputPin = Console.ReadLine();
 
-            for (int i = 0; i < usernames.Length; i++)
+            for (int i = 0; i < anvandare.Length; i++)
             {
-                if (inputUser == usernames[i] && inputPin == pins[i])
+                if (inputUser == anvandare[i] && inputPin == pins[i])
                 {
-                    loggedInUserIndex = i;
+                    inloggadAnvandareIndex = i;
                     Console.WriteLine($"Välkommen {inputUser}");
                     return true;
                 }
@@ -126,7 +126,7 @@ namespace Bibloteket
                             MinaLan();
                             break;
                         case 5:
-                            loggedInUserIndex = -1;
+                            inloggadAnvandareIndex = -1;
                             loggedIn = false;
                             Console.WriteLine("Du loggar ut...Tryck Enter.");
                             Console.ReadLine();
@@ -214,14 +214,14 @@ namespace Bibloteket
                     Console.ReadLine();
                     return;
                 }
-                int userIndex = loggedInUserIndex;
+                int userIndex = inloggadAnvandareIndex;
                 bool lanat = false;
                 //Check if the user has a empty loan slot(max 5 books).
                 for (int i = 0; i < 5; i++)
                 {
-                    if (userLoans[userIndex, i] == -1)
+                    if (anvadareLan[userIndex, i] == -1)
                     {
-                        userLoans[userIndex, i] = bokIndex;
+                        anvadareLan[userIndex, i] = bokIndex;
                         utlanadeExemplar[bokIndex]++;
                         Console.WriteLine($"Du har lånat: {bokTitlar[bokIndex]}");
                         Console.WriteLine("-------------------");
@@ -246,14 +246,14 @@ namespace Bibloteket
             {
                 for (int i = 0; i < 5; i++)
                 {
-                    userLoans[u, i] = -1;
+                    anvadareLan[u, i] = -1;
                 }
             }
         }
         //Loop through the loaned books and see if the user can return any book.
         static void LamnaTillbakaBok()
         {
-            int userIndex = loggedInUserIndex;
+            int anvandarIndex = inloggadAnvandareIndex;
             bool harLanadeBocker = false;
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("\t====== Lämna tillbaka bok ======");
@@ -262,7 +262,7 @@ namespace Bibloteket
             //Show the users loaned books.
             for (int i = 0; i < 5; i++)
             {
-                int bokIndex = userLoans[userIndex, i];
+                int bokIndex = anvadareLan[anvandarIndex, i];
                 if (bokIndex != -1)
                 {
                     Console.WriteLine($"{i + 1}.{bokTitlar[bokIndex]}");
@@ -281,7 +281,7 @@ namespace Bibloteket
             string input = Console.ReadLine();
             int val;
             //Check if the input is invalid.
-            if (!int.TryParse(input, out val) || val < 1 || val > 5 || userLoans[userIndex, val - 1] == -1)
+            if (!int.TryParse(input, out val) || val < 1 || val > 5 || anvadareLan[anvandarIndex, val - 1] == -1)
             {
                 Console.WriteLine("Ogiltligt val.Tryck Enter för att återgå.");
                 Console.ReadLine();
@@ -289,8 +289,8 @@ namespace Bibloteket
             }
             // Get the index of the borrowed book, mark the slot as empty (-1),
             // and decrement the number of currently loaned copies for that book
-            int lanadeBokIndex = userLoans[userIndex, val - 1];
-            userLoans[userIndex, val - 1] = -1;
+            int lanadeBokIndex = anvadareLan[anvandarIndex, val - 1];
+            anvadareLan[anvandarIndex, val - 1] = -1;
             utlanadeExemplar[lanadeBokIndex]--;
             Console.WriteLine($"Du har lämnat tillbaka: {bokTitlar[lanadeBokIndex]}");
             Console.WriteLine("-------------------");
@@ -300,7 +300,7 @@ namespace Bibloteket
         //Loop through our loans and shows them.
         static void MinaLan()
         {
-            int userIndex = loggedInUserIndex;
+            int anvandareIndex = inloggadAnvandareIndex;
             bool harLanadeBocker = false;
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("\t====== Visa mina lån ======");
@@ -308,7 +308,7 @@ namespace Bibloteket
             Console.WriteLine();
             for (int i = 0; i < 5; i++)
             {
-                int bokIndex = userLoans[userIndex, i];
+                int bokIndex = anvadareLan[anvandareIndex, i];
                 if (bokIndex != -1)
                 {
                     Console.WriteLine($"{i + 1}.{bokTitlar[bokIndex]}");
