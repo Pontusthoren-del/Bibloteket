@@ -40,9 +40,15 @@ namespace Bibloteket
                 {
                     loginAttempts++;
                     Console.WriteLine($"Felaktiga försök {loginAttempts} av 3.");
+                    Console.ReadLine();
+                    Console.Clear();
                     if (loginAttempts >= 3)
                     {
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
+                        Console.WriteLine("-----------------------");
                         Console.WriteLine("För många försök, programmet avslutas.");
+                        Console.WriteLine("-----------------------");
+                        Console.ResetColor();
                         Console.ReadLine();
                         programRunning = false;
                     }
@@ -69,6 +75,7 @@ namespace Bibloteket
             Console.WriteLine();
             Console.Write("Ange ditt användarnamn: ");
             string inputUser = Console.ReadLine();
+            Console.WriteLine("-----------------------");
 
             Console.Write("Ange din pinkod: ");
             string inputPin = Console.ReadLine();
@@ -238,7 +245,7 @@ namespace Bibloteket
                 }
             }
         }
-        // Loop through all users and all their loan slots,
+        //Loop through all users and all their loan slots, so the user have to many borrowed books.(5)
         // setting each slot to -1 to indicate that the user has not borrowed any books yet.
         static void InitLan()
         {
