@@ -64,10 +64,10 @@ namespace Bibloteket
         {
             Console.WriteLine("\t=== Logga in på Bibloteket ===");
             Console.WriteLine();
-            Console.WriteLine("Ange ditt användarnamn.");
+            Console.Write("Ange ditt användarnamn: ");
             string inputUser = Console.ReadLine();
 
-            Console.WriteLine("Ange din pinkod.");
+            Console.Write("Ange din pinkod: ");
             string inputPin = Console.ReadLine();
 
             for (int i = 0; i < usernames.Length; i++)
@@ -95,6 +95,8 @@ namespace Bibloteket
                 Console.WriteLine("4. Mina lån.");
                 Console.WriteLine("5. Logga ut.");
                 Console.WriteLine("-------------------");
+                Console.WriteLine("6. Avsluta programmet.");
+                Console.WriteLine("-------------------");
                 Console.WriteLine("Välj ett av alternativen.");
 
                 string input = Console.ReadLine();
@@ -121,6 +123,9 @@ namespace Bibloteket
                             loggedIn = false;
                             Console.WriteLine("Du loggar ut...Tryck Enter.");
                             Console.ReadLine();
+                            break;
+                        case 6:
+                            TurnOff();
                             break;
                         default:
                             Console.WriteLine("Ogiltligt val.Tryck Enter för att försöka igen.");
@@ -300,6 +305,13 @@ namespace Bibloteket
             Console.WriteLine("-------------------");
             Console.WriteLine("Tryck Enter för att återgå till huvudmenyn.");
             Console.ReadLine();
+        }
+
+        //Extra method for turning off the console.
+        static void TurnOff()
+        {
+            Console.WriteLine("Programmet avslutas.");
+            Environment.Exit(0);
         }
     }
 }
