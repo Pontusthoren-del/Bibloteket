@@ -8,7 +8,7 @@ namespace Bibloteket
         //GLOBAL ARRAYS
         //Usernames and pins hold the login info for the predefined users
         static string[] anvandare = new string[5];
-        static string[] pins = new string[5];
+        static string[] pinkoder = new string[5];
         //Book info:Titles,total copies and currently loaned copies.
         static string[] bokTitlar = new string[5];
         static int[] totalExemplar = new int[5];
@@ -26,24 +26,24 @@ namespace Bibloteket
         }
         static void RunProgram()
         {
-            bool programRunning = true;
-            int loginAttempts = 0;
+            bool startaProgram = true;
+            int inloggningsForsok = 0;
             //Main login loop: allows up to 3 failed login attempts before shutting down.
-            while (programRunning && loginAttempts < 3)
+            while (startaProgram && inloggningsForsok < 3)
             {
                 if (Login())
                 {
-                    loginAttempts = 0;
+                    inloggningsForsok = 0;
                     RunMainMenu();
                     Console.Clear();
                 }
                 else
                 {
-                    loginAttempts++;
-                    Console.WriteLine($"Felaktiga försök {loginAttempts} av 3.");
+                    inloggningsForsok++;
+                    Console.WriteLine($"Felaktiga försök {inloggningsForsok} av 3.");
                     Console.ReadLine();
                     Console.Clear();
-                    if (loginAttempts >= 3)
+                    if (inloggningsForsok >= 3)
                     {
                         Console.ForegroundColor = ConsoleColor.DarkRed;
                         Console.WriteLine("-----------------------");
@@ -51,7 +51,7 @@ namespace Bibloteket
                         Console.WriteLine("-----------------------");
                         Console.ResetColor();
                         Console.ReadLine();
-                        programRunning = false;
+                        startaProgram = false;
                     }
                 }
             }
@@ -60,11 +60,11 @@ namespace Bibloteket
         //This method fills the username and pin with predefined users.
         static void InitAnvandare()
         {
-            anvandare[0] = "Pontus"; pins[0] = "1111";
-            anvandare[1] = "Carl"; pins[1] = "2222";
-            anvandare[2] = "Amanda"; pins[2] = "3333";
-            anvandare[3] = "Josefine"; pins[3] = "4444";
-            anvandare[4] = "Elliott"; pins[4] = "5555";
+            anvandare[0] = "Pontus"; pinkoder[0] = "1111";
+            anvandare[1] = "Carl"; pinkoder[1] = "2222";
+            anvandare[2] = "Amanda"; pinkoder[2] = "3333";
+            anvandare[3] = "Josefine"; pinkoder[3] = "4444";
+            anvandare[4] = "Elliott"; pinkoder[4] = "5555";
         }
         //Handle user login.Returns true if credentials are correct.
         //Also set loggedInUserIndex to the currently logged in user.
@@ -77,13 +77,12 @@ namespace Bibloteket
             Console.Write("Ange ditt användarnamn: ");
             string inputUser = Console.ReadLine();
             Console.WriteLine("-----------------------");
-
             Console.Write("Ange din pinkod: ");
             string inputPin = Console.ReadLine();
 
             for (int i = 0; i < anvandare.Length; i++)
             {
-                if (inputUser == anvandare[i] && inputPin == pins[i])
+                if (inputUser == anvandare[i] && inputPin == pinkoder[i])
                 {
                     inloggadAnvandareIndex = i;
                     Console.WriteLine($"Välkommen {inputUser}");
@@ -113,10 +112,8 @@ namespace Bibloteket
                 Console.ResetColor();
                 Console.WriteLine("-------------------");
                 Console.WriteLine("Välj ett av alternativen.");
-
                 string input = Console.ReadLine();
                 int choice;
-
                 if (int.TryParse(input, out choice))
                 {
                     switch (choice)
@@ -182,7 +179,6 @@ namespace Bibloteket
             bokTitlar[2] = "Sagan om Ringen, Konungens återkomst."; totalExemplar[2] = 3; utlanadeExemplar[2] = 0;
             bokTitlar[3] = "The Silmarillion"; totalExemplar[3] = 3; utlanadeExemplar[3] = 0;
             bokTitlar[4] = "Beren and Lúthien"; totalExemplar[4] = 3; utlanadeExemplar[4] = 0;
-
         }
         //Lets the user borrow a book if available
         //Checks availabillity, updates users loan array, and increments loaned count
@@ -331,7 +327,6 @@ namespace Bibloteket
             Console.WriteLine("Tryck Enter för att återgå till huvudmenyn.");
             Console.ReadLine();
         }
-
         //Extra method for turning off the console.
         static void TurnOff()
         {
