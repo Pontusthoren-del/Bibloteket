@@ -13,7 +13,7 @@ namespace Bibloteket
         static string[] bokTitlar = new string[5];
         static int[] totalExemplar = new int[5];
         static int[] utlanadeExemplar = new int[5];
-        //Userloans keeps track of which books each user has borrowed.
+        //Userloans keeps track of which books each user has borrowed. First dimension is the user and the second is which books are borrowed(up to five).
         static int[,] anvandareLan = new int[5, 5];
         //Keep track of which user is currently logged in.
         static int inloggadAnvandareIndex = -1;
@@ -28,6 +28,7 @@ namespace Bibloteket
         {
             bool programRunning = true;
             int loginAttempts = 0;
+            //Main login loop: allows up to 3 failed login attempts before shutting down.
             while (programRunning && loginAttempts < 3)
             {
                 if (Login())
@@ -191,7 +192,7 @@ namespace Bibloteket
             Console.WriteLine("\t====== Låna bok ======");
             Console.ResetColor();
             Console.WriteLine();
-            //Loop through all book titles
+            //Loop through all books and calculate available copies.
             for (int i = 0; i < bokTitlar.Length; i++)
             {
                 //Calculate available copies for each book
@@ -266,7 +267,7 @@ namespace Bibloteket
             Console.WriteLine("\t====== Lämna tillbaka bok ======");
             Console.ResetColor();
             Console.WriteLine();
-            //Show the users loaned books.
+            //Search through the user's 5 loan slots to find an available one (-1 = empty).
             for (int i = 0; i < 5; i++)
             {
                 int bokIndex = anvandareLan[anvandarIndex, i];
