@@ -32,7 +32,7 @@ namespace Bibloteket
             while (startaProgram && inloggningsForsok < 3)
             {
                 if (Login())
-                {
+                {               
                     inloggningsForsok = 0;
                     RunMainMenu();
                     Console.Clear();
@@ -99,7 +99,13 @@ namespace Bibloteket
             {
                 Console.Clear();              
                 Console.ForegroundColor = ConsoleColor.Cyan;
+                //Console.WriteLine($"{user}");
                 Console.WriteLine("\t=== HUVUDMENY ===");
+                Console.ResetColor();
+                Console.WriteLine();
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine($"\t Inloggad: {anvandare[inloggadAnvandareIndex]}.");
+                Console.WriteLine();
                 Console.ResetColor();
                 Console.WriteLine("1. Visa böcker.");
                 Console.WriteLine("2. Låna bok.");
@@ -218,10 +224,10 @@ namespace Bibloteket
                     Console.ReadLine();
                     return;
                 }
+                //Check if the user has a empty loan slot(max 5 books).
                 int userIndex = inloggadAnvandareIndex;
                 bool lanat = false;
-                //Check if the user has a empty loan slot(max 5 books).
-                for (int i = 0; i < 5; i++)
+                for (int i = 0; i < anvandareLan.GetLength(1); i++)
                 {
                     if (anvandareLan[userIndex, i] == -1)
                     {
